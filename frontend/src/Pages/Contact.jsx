@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../Styles/Contact.css";
 
 const Contact = () => {
   // State to store form input values
@@ -32,9 +33,9 @@ const Contact = () => {
         style={{
           maxWidth: "26rem",
           margin: "0 auto",
-          border: "1px solid #dee2e6", // Add border
+       
           padding: "1rem",
-          borderRadius: "5px", // Add rounded corners
+          borderRadius: "15px", // Add rounded corners
         }}
         onSubmit={handleSubmit} // Add onSubmit handler
       >
@@ -87,10 +88,10 @@ const Contact = () => {
         </div>
 
         {/* Submit and Clear buttons */}
-        <div className="d-flex  justify-content-evenly text-center">
+        <div className="d-flex  justify-content-evenly text-center buttons mb-3">
           <button
             type="button"
-            className="btn btn-danger btn-block mb-4 me-2" // Add margin-end for spacing
+            className="btn btn-danger btn-block " // Add margin-end for spacing
             style={{ padding: "10px 20px", fontSize: "1.1rem" }} // Increase size
             onClick={handleClear} 
           >
@@ -100,7 +101,7 @@ const Contact = () => {
           <button
             data-mdb-ripple-init
             type="submit" 
-            className="btn btn-primary btn-block mb-4"
+            className="btn btn-primary btn-block"
             style={{ padding: "10px 20px", fontSize: "1.1rem" }} 
           >
             Send
