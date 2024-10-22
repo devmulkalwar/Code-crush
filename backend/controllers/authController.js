@@ -19,94 +19,67 @@ dotenv.config();
 // Register new user
 export const signup = async (req, res) => {
   const {
-    name,
+    fullName, 
     email,
     password,
     confirmPassword,
     role,
   } = req.body;
-  const profileImage = req.file;
-  if (profileImage) {
-    var { path } = profileImage;
-  }
 
   try {
-    // Validate user input
     console.log("Request body:", req.body);
-    console.log("profileImage:", profileImage);
-    if (
-      !email ||
-      !password ||
-      !name ||
-      !confirmPassword ||
-      !role
-    ) {
-      fs.unlinkSync(path);
+    
+    if (!email || !password || !fullName || !confirmPassword || !role) {
       throw new Error("All fields are required");
     }
 
-    if (password === confirmPassword) {
-      const userAlreadyExists = await User.findOne({ email });
-      if (userAlreadyExists) {
-        fs.unlinkSync(path);
-        return res
-          .status(400)
-          .json({ success: false, message: "User already exists" });
-      }
-
-      // Upload profile image to Cloudinary if it exists
-      let profileImageUrl = "";
-      console.log(profileImage);
-      if (profileImage) {
-        console.log("image path :", path);
-        const cloudinaryResult = await uploadOnCloudinary(path);
-        console.log("cloudianry result :", cloudinaryResult);
-        profileImageUrl = cloudinaryResult.url;
-      }
-
-      // Hash password
-      const hashedPassword = await bcryptjs.hash(password, 10);
-
-      // Generate verification token
-      const verificationToken = Math.floor(
-        100000 + Math.random() * 900000
-      ).toString();
-
-      // Create new user
-      const user = new User({
-        email,
-        password: hashedPassword,
-        name,
-        verificationToken,
-        verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
-        profileImage: profileImageUrl,
-      });
-
-      console.log("User data before saving:", user); // Check if the data is correct
-
-      await user.save(); // Check if save works
-      console.log("User saved successfully");
-
-      // Generate JWT token and set cookie
-       const token = generateTokenSetCookie(res, user._id);
-       console.log(token); 
-
-      // Send verification email
-      await sendVerificationEmail(user.email, verificationToken);
-
-      res.status(201).json({
-        success: true,
-        message: "Signup successful and verification email sent",
-        user: { ...user._doc, password: undefined },
-      });
-    } else {
+    if (password !== confirmPassword) {
       throw new Error("Passwords do not match");
     }
+
+    const userAlreadyExists = await User.findOne({ email });
+    if (userAlreadyExists) {
+      return res.status(400).json({ success: false, message: "User already exists" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcryptjs.hash(password, 10);
+
+    // Generate verification token
+    const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Create new user
+    const user = new User({
+      email,
+      password: hashedPassword,
+      fullName,  
+      verificationToken,
+      verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
+    });
+
+    console.log("User data before saving:", user);
+
+    await user.save();
+    console.log("User saved successfully");
+
+    // Generate JWT token and set cookie
+    const token = generateTokenSetCookie(res, user._id);
+    console.log(token); 
+
+    // Send verification email
+    await sendVerificationEmail(user.email, verificationToken);
+
+    res.status(201).json({
+      success: true,
+      message: "Signup successful and verification email sent",
+      user: { ...user._doc, password: undefined },
+    });
   } catch (error) {
-    console.error("Error during signup:", error); // Log the error to see details
-    res.status(400).json({ success: false, message: "Error during signup" });
+    console.error("Error during signup:", error);
+    res.status(400).json({ success: false, message: error.message || "Error during signup" });
   }
 };
+
 
 // Verify user email
 export const verifyEmail = async (req, res) => {
