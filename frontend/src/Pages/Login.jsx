@@ -1,85 +1,33 @@
-import React, { useState } from "react";
-import "../Styles/LogIn.css";
-import { Link } from "react-router-dom";
-import { useAuthContext } from "../Contexts/AuthContext";
+import React from 'react'
 
-const Login = () => {
-  const { login} = useAuthContext();
-  // State to hold form data
-  const [formData, setFormData] = useState({
-    email: "",
-    password: ""
-  });
-
-  // Handle input change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    const { email, password } = formData;
-
-    if (!email || !password) {
-      alert("Please fill in both fields");
-      return;
-    }
-    console.log("Logging in with", email, password);
-
-    try {
-      login(formData);
-    } catch (error) {
-      console.log(error)
-    }
-    
-    setFormData({ email: "", password: "" });
-  };
-
+const LogIn = () => {
   return (
     <div>
+      <div>
       <div className="main">
-        <div className="innerMain">
-          <div className="leftSide">
-            <h1>
-              The <span>Student</span> Log In
-            </h1>
-            <p>Welcome Back,</p>
-            <p>Please enter your correct Log In Credentials.</p>
-          </div>
-          <div className="rightSide">
-            <h2>Log In</h2>
-            <form onSubmit={handleSubmit}>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-              <button type="submit">Submit</button>
-              <Link to="/forgot-password">Forgot Password? Reset Now</Link>
-              <p>or</p>
-              <p>
-                Don't have an account? <Link to="/signup">Sign Up</Link>
-              </p>
-            </form>
-          </div>
-        </div>
+    <div className="innerMain">
+      <div className="leftSide">
+        <h1>The <span>Student</span> Log In</h1>
+        <p>Welcome Back,</p>
+        <p>Please enter your correct Log In Credentials.</p>
+      </div>
+      <div className="rightSide">
+        <h2>Log In</h2>
+        <form>
+          <input type="email" placeholder="Email"/>
+          <input type="password" placeholder="Password"/>
+          <button type="submit">Submit</button>
+          <a href="#">Forgot Password? Reset Now</a>
+          <p>or</p>
+          <p>Already have an account? <a href="./login.html">Sign In</a></p>
+
+        </form>
       </div>
     </div>
-  );
-};
+    </div>
+    </div>
+    </div>
+  )
+}
 
-export default Login;
+export default LogIn
