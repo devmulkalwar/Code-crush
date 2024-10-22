@@ -4,16 +4,16 @@ function App() {
   return (
     <div>
       <button type="button" className="btn btn-primary">
-        Primary
+        First
       </button>
       <button type="button" className="btn btn-secondary">
-        Secondary
+        Second
       </button>
       <button type="button" className="btn btn-success">
-        Success
+        Third
       </button>
       <button type="button" className="btn btn-danger">
-        Danger
+        Fourth  
       </button>
       <button type="button" className="btn btn-warning">
         Warning
