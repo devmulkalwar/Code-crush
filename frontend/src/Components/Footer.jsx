@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import { FaFacebookSquare, FaTwitterSquare, FaInstagramSquare, FaHome, FaQuestion, FaAddressBook } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -9,7 +10,7 @@ const Footer = () => {
         <div className="row">
           {/* Column 1 */}
           <div className="col-lg-4 col-md-12 col-md-12 mb-4 mb-md-0">
-            <h5 className="text" style={{ fontWeight: 'bold', fontFamily: 'Playwrite GB S, cursive', fontSize: '32px'}}>FastasticFour</h5>
+            <h5 className="text" style={{ fontWeight: 'bold', fontFamily: 'Playwrite GB S, cursive', fontSize: '32px'}}>Fastastic4</h5>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde blanditiis inventore explicabo ab nobis sed eius, at laboriosam magni laborum? <br />
             </p>
@@ -29,10 +30,10 @@ const Footer = () => {
           {/* Column 3 */}
           <div className="col-lg-2 col-md-6 col-sm-6 col-xs-6 mb-4 mb-md-0">
             <h5 className="text-uppercase">Follow Us</h5>
-            <ul className="list-unstyled mb-0">
-              <li><a href="#" target='_blank' className="text-dark">Twitter</a></li>
-              <li><a href="#" target='_blank' className="text-dark">Facebook</a></li>
-              <li><a href="#" target='_blank' className="text-dark">Instagram</a></li>
+            <ul className="list-unstyled mb-0" style={{textDecoration: 'none'}}>
+              <li><a href="#" target='_blank' className="text-dark"><FaTwitterSquare /> Twitter</a></li>
+              <li><a href="#" target='_blank' className="text-dark"><FaFacebookSquare /> Facebook</a></li>
+              <li><a href="#" target='_blank' className="text-dark"><FaInstagramSquare /> Instagram</a></li>
             </ul>
           </div>
     

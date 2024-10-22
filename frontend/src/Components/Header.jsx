@@ -6,7 +6,7 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg navbar-light">
       <div className="container">
         <a className="navbar-brand" style={style.title} href="/">
-          FantasticFour
+          Fantastic4
         </a>
         <button
           className="navbar-toggler"
