@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthContext } from '../Contexts/AuthContext';
 
 const ForgotPassword = () => {
+  const { forgotPassword } = useAuthContext();  // Access forgotPassword function from context
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Reset link sent to:', email);
-    setEmail('');
+    
+    try {
+      await forgotPassword(email);  
+    } catch (error) {
+      console.log(error);
+    }
+    
+    setEmail('');  
   };
 
   return (

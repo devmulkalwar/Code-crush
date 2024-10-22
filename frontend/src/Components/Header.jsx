@@ -1,7 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../Contexts/AuthContext";
 
 const Header = () => {
+  const {logout} = useAuthContext();
+
+  const handleLogout = async () => {
+   try {
+    logout();
+   } catch (error) {
+    console.log(error)
+   }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
       <div className="container">
@@ -29,6 +40,21 @@ const Header = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/about">
                 About
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/login">
+               Login
+              </Link>
+            </li> 
+            <li className="nav-item">
+              <Link className="nav-link" to="/signup">
+               Sign up
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" onClick={handleLogout}>
+               Logout
               </Link>
             </li>
           </ul>

@@ -1,13 +1,30 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link, useParams } from 'react-router-dom'; // Import Link for navigation
+import { useAuthContext } from '../Contexts/AuthContext';
 
 const ResetPassword = () => {
+  const{resetPassword} = useAuthContext();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const { token } = useParams();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Here, you would typically handle the password reset logic, such as API call
+    if ( !password || !confirmPassword) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    try {
+      await resetPassword(token, password);
+    } catch (error) {
+      console.log(error)
+    }
     console.log('Password reset to:', password);
     setPassword('');
     setConfirmPassword('');

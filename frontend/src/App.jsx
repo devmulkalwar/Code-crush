@@ -4,9 +4,11 @@ import Footer from "./Components/Footer";
 import { Outlet } from "react-router-dom";
 import { ToastContainer, Bounce } from "react-toastify";  // Import Bounce transition
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContextProvider } from "./Contexts/AuthContextProvider";
 
 function App() {
   return (
+    <AuthContextProvider>
     <div className="d-flex flex-column min-vh-100"> 
       <Header />
       <main className="flex-grow-1">
@@ -27,6 +29,7 @@ function App() {
         transition={Bounce}
       />
     </div>
+    </AuthContextProvider>
   );
 }
 
