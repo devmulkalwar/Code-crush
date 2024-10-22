@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "../Styles/Contact.css";
+import emailjs from "emailjs-com"; // Import emailjs for sending emails
+import { toast } from "react-toastify"; // Assuming you're using react-toastify for notifications
+import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast notifications
 
 const Contact = () => {
   // State to store form input values
@@ -9,16 +12,64 @@ const Contact = () => {
     message: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const form = useRef(null); // Ref to form element
+
   // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handle toast messages
+  const handleToast = (message, type) => {
+    toast[type](message, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
   // Handle form submission
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission
-    console.log(formData); // Log the input values to the console
+    e.preventDefault();
+    setIsLoading(true); // Set loading state to true
+
+    emailjs.init(import.meta.env.VITE_EMAIL_PRIVATE_KEY); // Use emailjs public key
+
+    emailjs
+      .sendForm(
+        import.meta.env.VITE_EMAIL_SERVICE_ID, // Service ID
+        import.meta.env.VITE_EMAIL_TEMPLATE_ID, // Template ID
+        form.current, // Form reference
+        import.meta.env.VITE_EMAIL_PUBLIC_KEY // Corrected to use public key
+      )
+      .then(
+        () => {
+          const successMessage = "Your message has been sent successfully.";
+          handleToast(successMessage, "success");
+          setIsLoading(false); // Reset loading state
+          setFormData({
+            name: "",
+            email: "",
+            message: "",
+          });
+        },
+        (error) => {
+          const errorMessage = error?.text || "Error sending message";
+          handleToast(errorMessage, "error");
+          setIsLoading(false); // Reset loading state
+          setFormData({
+            name: "",
+            email: "",
+            message: "",
+          });
+        }
+      );
   };
 
   // Handle clear button
@@ -30,10 +81,10 @@ const Contact = () => {
     <div className="container mt-5">
       <h2 className="text-center mb-4">Contact Us</h2>
       <form
+        ref={form} // Assign form reference
         style={{
           maxWidth: "26rem",
           margin: "0 auto",
-       
           padding: "1rem",
           borderRadius: "15px", // Add rounded corners
         }}
@@ -52,6 +103,7 @@ const Contact = () => {
             value={formData.name}
             onChange={handleChange} // Handle change
             placeholder=" "
+            required
           />
         </div>
 
@@ -68,6 +120,7 @@ const Contact = () => {
             value={formData.email}
             onChange={handleChange} // Handle change
             placeholder=" "
+            required
           />
         </div>
 
@@ -84,27 +137,28 @@ const Contact = () => {
             onChange={handleChange} // Handle change
             rows="4"
             placeholder=" "
+            required
           ></textarea>
         </div>
 
         {/* Submit and Clear buttons */}
-        <div className="d-flex  justify-content-evenly text-center buttons mb-3">
+        <div className="d-flex justify-content-evenly text-center buttons mb-3">
           <button
             type="button"
-            className="btn btn-danger btn-block " // Add margin-end for spacing
+            className="btn btn-danger btn-block" // Add margin-end for spacing
             style={{ padding: "10px 20px", fontSize: "1.1rem" }} // Increase size
-            onClick={handleClear} 
+            onClick={handleClear}
           >
             Clear
           </button>
 
           <button
             data-mdb-ripple-init
-            type="submit" 
+            type="submit"
             className="btn btn-primary btn-block"
-            style={{ padding: "10px 20px", fontSize: "1.1rem" }} 
+            style={{ padding: "10px 20px", fontSize: "1.1rem" }}
           >
-            Send
+            {isLoading ? "Sending..." : "Send"} {/* Loading indicator */}
           </button>
         </div>
       </form>
